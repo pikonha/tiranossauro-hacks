@@ -1,13 +1,29 @@
 import { Exercicio } from "./types";
 
 export class RepositorioMemoria {
-  constructor() {}
+  private data: { [id: number]: Exercicio };
 
-  async create(entity: Exercicio) {}
+  constructor() {
+    this.data = {};
+  }
 
-  async read(id: number) {}
+  async create(entity: Exercicio) {
+    this.data[entity.id] = entity;
+    return entity;
+  }
 
-  async update(id: number, updatedEntity: Partial<Exercicio>) {}
+  async read(id: number) {
+    return this.data[id];
+  }
 
-  async delete(id: number) {}
+  async update(id: number, updatedEntity: Partial<Exercicio>) {
+    const existingEntity = this.data[id];
+    if (existingEntity) {
+      this.data[id] = { ...existingEntity, ...updatedEntity };
+    }
+  }
+
+  async delete(id: number) {
+    delete this.data[id];
+  }
 }
